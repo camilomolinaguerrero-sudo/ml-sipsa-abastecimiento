@@ -1,0 +1,1735 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1. Base de datos &#8212; Interrupciones en corredores de abastecimiento de alimentos</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]]}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '01_base_datos';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="2. Análisis exploratorio (I): partición, objetivo, análisis uni, bi y multivariado, y fuga" href="02_eda_general.html" />
+    <link rel="prev" title="Interrupciones en corredores de abastecimiento de alimentos en Colombia" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Interrupciones en corredores de abastecimiento de alimentos</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Interrupciones en corredores de abastecimiento de alimentos en Colombia
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Entregable 1</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Base de datos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda_general.html">2. Análisis exploratorio (I): partición, objetivo, análisis uni, bi y multivariado, y fuga</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_eda_temporal_espacial.html">3. Análisis exploratorio (II): componentes temporal, espacial y espacio-temporal</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_modelo_base.html">4. Preprocesamiento y modelo base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_conclusiones.html">5. Conclusiones y limitaciones</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/01_base_datos.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>1. Base de datos</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problema-de-investigacion">1.1 Problema de investigación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#justificacion-de-la-seleccion-del-dataset">1.2 Justificación de la selección del dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuente-y-licencia">1.3 Fuente y licencia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-crudos-un-registro-por-carga">1.4 Datos crudos: un registro por carga</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diccionario-del-panel-de-modelado">1.5 Diccionario del panel de modelado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-de-los-datos">1.6 Estructura de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calidad-de-los-datos">1.7 Calidad de los datos</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes">1.7.1 Valores faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#duplicados-exactos-y-casi-duplicados">1.7.2 Duplicados exactos y casi-duplicados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-imposibles-o-inconsistentes">1.7.3 Valores imposibles o inconsistentes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outliers-en-la-cantidad-por-carga">1.7.4 Outliers en la cantidad por carga</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-de-muestreo-y-representatividad">1.7.5 Sesgos de muestreo y representatividad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-eticas">1.8 Consideraciones éticas</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="base-de-datos">
+<h1>1. Base de datos<a class="headerlink" href="#base-de-datos" title="Link to this heading">#</a></h1>
+<p>Este capítulo cubre la sección 1 del entregable: problema de investigación, justificación,
+fuente y licencia, diccionario de variables, estructura, tamaño de la muestra, calidad de los
+datos y consideraciones éticas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"../src"</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">u</span>
+
+<span class="n">u</span><span class="o">.</span><span class="n">estilo</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.max_columns"</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.float_format"</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">,.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">SEMILLA</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="problema-de-investigacion">
+<h2>1.1 Problema de investigación<a class="headerlink" href="#problema-de-investigacion" title="Link to this heading">#</a></h2>
+<p>La tesis doctoral en la que se inscribe este proyecto propone una arquitectura de gobernanza
+para la gestión de proyectos de logística inteligente orientada a la resiliencia alimentaria
+en territorios PDET y ZOMAC. Uno de sus componentes es un modelo analítico que anticipe
+riesgos de desabastecimiento. Este proyecto construye la primera pieza empírica de ese
+componente.</p>
+<p><strong>Pregunta.</strong> Con la información disponible al cierre de una semana, ¿es posible anticipar si un
+corredor de abastecimiento (municipio de origen → central mayorista) sufrirá una
+<strong>interrupción</strong> la semana siguiente?</p>
+<p><strong>Definición operativa de la variable objetivo.</strong> Para cada corredor <em>c</em> y semana <em>t</em>:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{interrupcion}_{c,t+1} = \mathbb{1}\left[\, r_{c,t+1} &lt; 0{,}5 \cdot \bar r_{c,t-7:t} \,\right]
+\]</div>
+<p>donde <span class="math notranslate nohighlight">\(r_{c,t}\)</span> son los kilogramos que llegan por el corredor en la semana <em>t</em> divididos entre los
+días en que el DANE encuestó esa central en esa semana, y <span class="math notranslate nohighlight">\(\bar r_{c,t-7:t}\)</span> es el promedio de las
+ocho semanas anteriores (incluida <em>t</em>). Normalizar por días de encuesta evita confundir una
+semana con menos días de recolección con una caída real del abastecimiento.</p>
+<p><strong>Población en riesgo.</strong> Solo se consideran corredores regulares: los que registraron
+abastecimiento en al menos 4 de las 8 semanas previas y cuya central fue encuestada en <em>t+1</em>.</p>
+<p><strong>Tipo de problema.</strong> Clasificación binaria sobre un panel espacio-temporal (corredores ×
+semanas, con coordenadas de origen y destino). Según la figura 1 del enunciado se sigue la
+<strong>ruta A</strong> (clasificación) añadiendo las secciones 2.6 a 2.8 (componentes temporal, espacial y
+espacio-temporal) y una partición cronológica.</p>
+</section>
+<section id="justificacion-de-la-seleccion-del-dataset">
+<h2>1.2 Justificación de la selección del dataset<a class="headerlink" href="#justificacion-de-la-seleccion-del-dataset" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Pertinencia temática.</strong> SIPSA-A registra cada carga de alimentos que ingresa a las
+principales centrales mayoristas del país, con su municipio de procedencia. Es la fuente
+oficial más detallada sobre flujos logísticos de alimentos en Colombia y permite observar
+directamente la continuidad del abastecimiento, que es el núcleo de la resiliencia
+alimentaria en la propuesta doctoral.</p></li>
+<li><p><strong>Articulación territorial.</strong> Incluye la central de Bazurto (Cartagena), de interés para la
+Secretaría de Agroindustria de Bolívar, y cientos de municipios de origen, de los cuales una
+parte son PDET. El cruce con el listado oficial de municipios PDET permite analizar si los
+corredores que nacen en esos territorios son más frágiles.</p></li>
+<li><p><strong>Dificultad adecuada.</strong> La interrupción de un corredor depende de factores no observados
+(clima, orden público, precios, decisiones de transportadores), por lo que el problema no es
+trivial y deja espacio para los modelos del resto del curso.</p></li>
+</ul>
+</section>
+<section id="fuente-y-licencia">
+<h2>1.3 Fuente y licencia<a class="headerlink" href="#fuente-y-licencia" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Recurso</p></th>
+<th class="head"><p>Entidad</p></th>
+<th class="head"><p>Enlace</p></th>
+<th class="head"><p>Uso</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SIPSA-A, microdatos 2018-2025 (18 archivos)</p></td>
+<td><p>DANE</p></td>
+<td><p><a class="reference external" href="https://microdatos.dane.gov.co/index.php/catalog/697">microdatos.dane.gov.co, catálogo 697</a> · <a class="reference external" href="https://www.datos.gov.co/d/ymnp-apvk">datos.gov.co ymnp-apvk</a></p></td>
+<td><p>Registros de ingreso de alimentos</p></td>
+</tr>
+<tr class="row-odd"><td><p>Municipios PDET</p></td>
+<td><p>Agencia de Renovación del Territorio</p></td>
+<td><p><a class="reference external" href="https://www.datos.gov.co/d/idrk-ba8y">datos.gov.co idrk-ba8y</a></p></td>
+<td><p>Marca PDET del municipio de origen</p></td>
+</tr>
+<tr class="row-even"><td><p>DIVIPOLA, códigos y coordenadas de municipios</p></td>
+<td><p>DANE</p></td>
+<td><p><a class="reference external" href="https://www.datos.gov.co/d/gdxc-w37w">datos.gov.co gdxc-w37w</a></p></td>
+<td><p>Centroides (EPSG:4326)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Geometrías municipales simplificadas</p></td>
+<td><p>IGAC / gestores catastrales</p></td>
+<td><p><a class="reference external" href="https://www.datos.gov.co/d/bhcx-bx97">datos.gov.co bhcx-bx97</a></p></td>
+<td><p>Mapa base y coropletas</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Licencia.</strong> Los cuatro recursos se publican como datos abiertos en el Portal de Datos
+Abiertos del Estado colombiano; su reutilización es libre con atribución a la entidad que los
+produce. Los microdatos del DANE son anonimizados y de acceso público. El archivo del primer
+cuatrimestre de 2026 figura en el catálogo pero el servidor del DANE respondía
+<code class="docutils literal notranslate"><span class="pre">RESOURCE_NOT_AVAILABLE</span></code> al momento de la descarga (29/09/2026), por lo que el periodo de
+estudio termina en diciembre de 2025.</p>
+<p>El script <code class="docutils literal notranslate"><span class="pre">src/01_descarga_consolidacion.py</span></code> descarga y consolida los archivos;
+<code class="docutils literal notranslate"><span class="pre">src/02_construir_panel.py</span></code> construye el panel semanal. Ambos son reproducibles de principio a fin.</p>
+</section>
+<section id="datos-crudos-un-registro-por-carga">
+<h2>1.4 Datos crudos: un registro por carga<a class="headerlink" href="#datos-crudos-un-registro-por-carga" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">INTERIM</span> <span class="o">/</span> <span class="s2">"sipsa_a_envios.parquet"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Registros: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">   Columnas: </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">env</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Registros: 15,493,054   Columnas: 10
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mercado</th>
+      <th>fecha</th>
+      <th>cod_depto</th>
+      <th>cod_mpio</th>
+      <th>depto_origen</th>
+      <th>mpio_origen</th>
+      <th>grupo</th>
+      <th>alimento</th>
+      <th>kg</th>
+      <th>periodo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Armenia, Mercar</td>
+      <td>2018-01-02</td>
+      <td>52</td>
+      <td>52838</td>
+      <td>NARIÑO</td>
+      <td>TÚQUERRES</td>
+      <td>TUBERCULOS, RAICES Y PLATANOS</td>
+      <td>Papa suprema</td>
+      <td>9,750.000</td>
+      <td>2018-S1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Armenia, Mercar</td>
+      <td>2018-01-02</td>
+      <td>52</td>
+      <td>52838</td>
+      <td>NARIÑO</td>
+      <td>TÚQUERRES</td>
+      <td>TUBERCULOS, RAICES Y PLATANOS</td>
+      <td>Papa capira</td>
+      <td>5,000.000</td>
+      <td>2018-S1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Armenia, Mercar</td>
+      <td>2018-01-02</td>
+      <td>52</td>
+      <td>52838</td>
+      <td>NARIÑO</td>
+      <td>TÚQUERRES</td>
+      <td>TUBERCULOS, RAICES Y PLATANOS</td>
+      <td>Papa suprema</td>
+      <td>28,000.000</td>
+      <td>2018-S1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Armenia, Mercar</td>
+      <td>2018-01-02</td>
+      <td>52</td>
+      <td>52317</td>
+      <td>NARIÑO</td>
+      <td>GUACHUCAL</td>
+      <td>TUBERCULOS, RAICES Y PLATANOS</td>
+      <td>Papa suprema</td>
+      <td>9,750.000</td>
+      <td>2018-S1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Armenia, Mercar</td>
+      <td>2018-01-02</td>
+      <td>66</td>
+      <td>66001</td>
+      <td>RISARALDA</td>
+      <td>PEREIRA</td>
+      <td>VERDURAS Y HORTALIZAS</td>
+      <td>Cebolla junca</td>
+      <td>1,400.000</td>
+      <td>2018-S1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dicc_crudo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Central mayorista donde se registra el ingreso (ciudad, mercado)"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"día"</span><span class="p">,</span> <span class="s2">"Día de la encuesta en la central"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"cod_depto"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"código DIVIPOLA"</span><span class="p">,</span> <span class="s2">"Departamento de procedencia de la carga"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"cod_mpio"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"código DIVIPOLA / ISO"</span><span class="p">,</span> <span class="s2">"Municipio de procedencia (o país, para importaciones)"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"depto_origen"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Nombre del departamento de procedencia"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"mpio_origen"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Nombre del municipio o país de procedencia"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"grupo"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Grupo de alimentos SIPSA (8 grupos)"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"alimento"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Producto específico"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"kg"</span><span class="p">,</span> <span class="s2">"numérica continua"</span><span class="p">,</span> <span class="s2">"kilogramos"</span><span class="p">,</span> <span class="s2">"Cantidad que ingresa en la carga"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"periodo"</span><span class="p">,</span> <span class="s2">"categórica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Archivo de origen (semestre o cuatrimestre)"</span><span class="p">),</span>
+<span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"variable"</span><span class="p">,</span> <span class="s2">"tipo"</span><span class="p">,</span> <span class="s2">"unidad"</span><span class="p">,</span> <span class="s2">"significado"</span><span class="p">])</span>
+<span class="n">dicc_crudo</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>tipo</th>
+      <th>unidad</th>
+      <th>significado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mercado</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Central mayorista donde se registra el ingreso...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>fecha</td>
+      <td>fecha</td>
+      <td>día</td>
+      <td>Día de la encuesta en la central</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>cod_depto</td>
+      <td>categórica</td>
+      <td>código DIVIPOLA</td>
+      <td>Departamento de procedencia de la carga</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>cod_mpio</td>
+      <td>categórica</td>
+      <td>código DIVIPOLA / ISO</td>
+      <td>Municipio de procedencia (o país, para importa...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>depto_origen</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Nombre del departamento de procedencia</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>mpio_origen</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Nombre del municipio o país de procedencia</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>grupo</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Grupo de alimentos SIPSA (8 grupos)</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>alimento</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Producto específico</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>kg</td>
+      <td>numérica continua</td>
+      <td>kilogramos</td>
+      <td>Cantidad que ingresa en la carga</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>periodo</td>
+      <td>categórica</td>
+      <td>-</td>
+      <td>Archivo de origen (semestre o cuatrimestre)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="diccionario-del-panel-de-modelado">
+<h2>1.5 Diccionario del panel de modelado<a class="headerlink" href="#diccionario-del-panel-de-modelado" title="Link to this heading">#</a></h2>
+<p>El panel agrega las cargas por corredor y semana. Todas las predictoras se calculan con
+información disponible al cierre de la semana <em>t</em>; la variable objetivo describe <em>t+1</em>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">panel</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">cargar_panel</span><span class="p">()</span>
+<span class="n">dicc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span>
+    <span class="p">(</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"categórica (32)"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Central mayorista de destino"</span><span class="p">,</span> <span class="s2">"identificación / predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"cod_mpio"</span><span class="p">,</span> <span class="s2">"categórica (925)"</span><span class="p">,</span> <span class="s2">"DIVIPOLA"</span><span class="p">,</span> <span class="s2">"Municipio de origen"</span><span class="p">,</span> <span class="s2">"identificador (no se usa como predictora)"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"semana"</span><span class="p">,</span> <span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"semana (lunes)"</span><span class="p">,</span> <span class="s2">"Semana t de referencia"</span><span class="p">,</span> <span class="s2">"índice temporal"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"semana_t1"</span><span class="p">,</span> <span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"semana (lunes)"</span><span class="p">,</span> <span class="s2">"Semana t+1 que se predice"</span><span class="p">,</span> <span class="s2">"índice temporal"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"interrupcion_t1"</span><span class="p">,</span> <span class="s2">"binaria"</span><span class="p">,</span> <span class="s2">"0/1"</span><span class="p">,</span> <span class="s2">"Caída &gt; 50 </span><span class="si">% d</span><span class="s2">el abastecimiento en t+1 frente al promedio de 8 semanas"</span><span class="p">,</span> <span class="s2">"OBJETIVO"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"tasa_t1"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"kg/día"</span><span class="p">,</span> <span class="s2">"Abastecimiento en t+1"</span><span class="p">,</span> <span class="s2">"EXCLUIDA (define el objetivo)"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"tasa_t"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"kg/día"</span><span class="p">,</span> <span class="s2">"Abastecimiento en t"</span><span class="p">,</span> <span class="s2">"auxiliar"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"base8"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"kg/día"</span><span class="p">,</span> <span class="s2">"Promedio de las 8 semanas previas"</span><span class="p">,</span> <span class="s2">"auxiliar"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"log_base8"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"log(1 + t/día)"</span><span class="p">,</span> <span class="s2">"Escala del corredor"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"ratio_t"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"razón"</span><span class="p">,</span> <span class="s2">"Abastecimiento de t sobre su promedio de 8 semanas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"ratio_t_1"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"razón"</span><span class="p">,</span> <span class="s2">"Abastecimiento de t-1 sobre su promedio de 8 semanas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"cv8"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"razón"</span><span class="p">,</span> <span class="s2">"Coeficiente de variación en 8 semanas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pend8_rel"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"1/semana"</span><span class="p">,</span> <span class="s2">"Pendiente de la tendencia de 8 semanas, relativa al promedio"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"activas8"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"semanas"</span><span class="p">,</span> <span class="s2">"Semanas con abastecimiento entre las 8 previas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"activas26"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"proporción"</span><span class="p">,</span> <span class="s2">"Fracción de semanas activas en las 26 previas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"n_envios8"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"cargas/semana"</span><span class="p">,</span> <span class="s2">"Promedio de cargas semanales en 8 semanas"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"n_alimentos8"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"productos/semana"</span><span class="p">,</span> <span class="s2">"Promedio de productos distintos por semana"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"antig_sem"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"semanas"</span><span class="p">,</span> <span class="s2">"Semanas desde la primera aparición del corredor"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sh_&lt;grupo&gt;"</span><span class="p">,</span> <span class="s2">"numérica (8)"</span><span class="p">,</span> <span class="s2">"proporción"</span><span class="p">,</span> <span class="s2">"Participación de cada grupo de alimentos en 8 semanas"</span><span class="p">,</span> <span class="s2">"predictoras"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"grupo_dom"</span><span class="p">,</span> <span class="s2">"categórica (8)"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Grupo de alimentos dominante del corredor"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"frac_caida_mercado_t"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"proporción"</span><span class="p">,</span> <span class="s2">"Fracción de corredores de la misma central con caída en t"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"frac_caida_nacional_t"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"proporción"</span><span class="p">,</span> <span class="s2">"Fracción de corredores del país con caída en t"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"dist_km"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"km"</span><span class="p">,</span> <span class="s2">"Distancia haversine entre centroides de origen y ciudad de la central"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"mismo_depto"</span><span class="p">,</span> <span class="s2">"binaria"</span><span class="p">,</span> <span class="s2">"0/1"</span><span class="p">,</span> <span class="s2">"Origen y central en el mismo departamento"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"local"</span><span class="p">,</span> <span class="s2">"binaria"</span><span class="p">,</span> <span class="s2">"0/1"</span><span class="p">,</span> <span class="s2">"Origen es el mismo municipio de la central"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pdet_origen"</span><span class="p">,</span> <span class="s2">"binaria"</span><span class="p">,</span> <span class="s2">"0/1"</span><span class="p">,</span> <span class="s2">"Municipio de origen PDET"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"depto_origen"</span><span class="p">,</span> <span class="s2">"categórica (32)"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Departamento de origen"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"festivos_t1"</span><span class="p">,</span> <span class="s2">"numérica discreta"</span><span class="p">,</span> <span class="s2">"días"</span><span class="p">,</span> <span class="s2">"Festivos nacionales en la semana t+1 (calendario conocido)"</span><span class="p">,</span> <span class="s2">"predictora"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"sem_sin, sem_cos"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="s2">"Codificación cíclica de la semana del año de t+1"</span><span class="p">,</span> <span class="s2">"predictoras"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"lat_o, lon_o, lat_m, lon_m"</span><span class="p">,</span> <span class="s2">"numérica"</span><span class="p">,</span> <span class="s2">"grados (EPSG:4326)"</span><span class="p">,</span> <span class="s2">"Coordenadas de origen y destino"</span><span class="p">,</span> <span class="s2">"EDA espacial / bloques"</span><span class="p">),</span>
+<span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">"variable"</span><span class="p">,</span> <span class="s2">"tipo"</span><span class="p">,</span> <span class="s2">"unidad"</span><span class="p">,</span> <span class="s2">"significado"</span><span class="p">,</span> <span class="s2">"rol"</span><span class="p">])</span>
+<span class="n">dicc</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>tipo</th>
+      <th>unidad</th>
+      <th>significado</th>
+      <th>rol</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mercado</td>
+      <td>categórica (32)</td>
+      <td>-</td>
+      <td>Central mayorista de destino</td>
+      <td>identificación / predictora</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>cod_mpio</td>
+      <td>categórica (925)</td>
+      <td>DIVIPOLA</td>
+      <td>Municipio de origen</td>
+      <td>identificador (no se usa como predictora)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>semana</td>
+      <td>fecha</td>
+      <td>semana (lunes)</td>
+      <td>Semana t de referencia</td>
+      <td>índice temporal</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>semana_t1</td>
+      <td>fecha</td>
+      <td>semana (lunes)</td>
+      <td>Semana t+1 que se predice</td>
+      <td>índice temporal</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>interrupcion_t1</td>
+      <td>binaria</td>
+      <td>0/1</td>
+      <td>Caída &gt; 50 % del abastecimiento en t+1 frente ...</td>
+      <td>OBJETIVO</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>tasa_t1</td>
+      <td>numérica</td>
+      <td>kg/día</td>
+      <td>Abastecimiento en t+1</td>
+      <td>EXCLUIDA (define el objetivo)</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>tasa_t</td>
+      <td>numérica</td>
+      <td>kg/día</td>
+      <td>Abastecimiento en t</td>
+      <td>auxiliar</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>base8</td>
+      <td>numérica</td>
+      <td>kg/día</td>
+      <td>Promedio de las 8 semanas previas</td>
+      <td>auxiliar</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>log_base8</td>
+      <td>numérica</td>
+      <td>log(1 + t/día)</td>
+      <td>Escala del corredor</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>ratio_t</td>
+      <td>numérica</td>
+      <td>razón</td>
+      <td>Abastecimiento de t sobre su promedio de 8 sem...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>ratio_t_1</td>
+      <td>numérica</td>
+      <td>razón</td>
+      <td>Abastecimiento de t-1 sobre su promedio de 8 s...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>cv8</td>
+      <td>numérica</td>
+      <td>razón</td>
+      <td>Coeficiente de variación en 8 semanas</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>pend8_rel</td>
+      <td>numérica</td>
+      <td>1/semana</td>
+      <td>Pendiente de la tendencia de 8 semanas, relati...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>activas8</td>
+      <td>numérica discreta</td>
+      <td>semanas</td>
+      <td>Semanas con abastecimiento entre las 8 previas</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>activas26</td>
+      <td>numérica</td>
+      <td>proporción</td>
+      <td>Fracción de semanas activas en las 26 previas</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>n_envios8</td>
+      <td>numérica</td>
+      <td>cargas/semana</td>
+      <td>Promedio de cargas semanales en 8 semanas</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>n_alimentos8</td>
+      <td>numérica</td>
+      <td>productos/semana</td>
+      <td>Promedio de productos distintos por semana</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>antig_sem</td>
+      <td>numérica discreta</td>
+      <td>semanas</td>
+      <td>Semanas desde la primera aparición del corredor</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>sh_&lt;grupo&gt;</td>
+      <td>numérica (8)</td>
+      <td>proporción</td>
+      <td>Participación de cada grupo de alimentos en 8 ...</td>
+      <td>predictoras</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>grupo_dom</td>
+      <td>categórica (8)</td>
+      <td>-</td>
+      <td>Grupo de alimentos dominante del corredor</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>frac_caida_mercado_t</td>
+      <td>numérica</td>
+      <td>proporción</td>
+      <td>Fracción de corredores de la misma central con...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>frac_caida_nacional_t</td>
+      <td>numérica</td>
+      <td>proporción</td>
+      <td>Fracción de corredores del país con caída en t</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>dist_km</td>
+      <td>numérica</td>
+      <td>km</td>
+      <td>Distancia haversine entre centroides de origen...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>mismo_depto</td>
+      <td>binaria</td>
+      <td>0/1</td>
+      <td>Origen y central en el mismo departamento</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>local</td>
+      <td>binaria</td>
+      <td>0/1</td>
+      <td>Origen es el mismo municipio de la central</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>pdet_origen</td>
+      <td>binaria</td>
+      <td>0/1</td>
+      <td>Municipio de origen PDET</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>depto_origen</td>
+      <td>categórica (32)</td>
+      <td>-</td>
+      <td>Departamento de origen</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>festivos_t1</td>
+      <td>numérica discreta</td>
+      <td>días</td>
+      <td>Festivos nacionales en la semana t+1 (calendar...</td>
+      <td>predictora</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>sem_sin, sem_cos</td>
+      <td>numérica</td>
+      <td>-</td>
+      <td>Codificación cíclica de la semana del año de t+1</td>
+      <td>predictoras</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>lat_o, lon_o, lat_m, lon_m</td>
+      <td>numérica</td>
+      <td>grados (EPSG:4326)</td>
+      <td>Coordenadas de origen y destino</td>
+      <td>EDA espacial / bloques</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="estructura-de-los-datos">
+<h2>1.6 Estructura de los datos<a class="headerlink" href="#estructura-de-los-datos" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Unidad de observación del dato crudo:</strong> una carga (vehículo o lote) que ingresa a una
+central mayorista en un día, con su producto, cantidad y municipio de procedencia.</p></li>
+<li><p><strong>Unidad de observación del modelo:</strong> corredor-semana, es decir, el par
+(central de destino, municipio de origen) en una semana.</p></li>
+<li><p><strong>Nivel de agregación:</strong> semanal (lunes a domingo), sumando todas las cargas del corredor.</p></li>
+<li><p><strong>Tipo de datos:</strong> panel longitudinal espacio-temporal. Cada corredor es una serie de tiempo
+semanal y tiene dos localizaciones (origen y destino).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_corr</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"cod_mpio"</span><span class="p">])</span><span class="o">.</span><span class="n">ngroups</span>
+<span class="n">p_pred</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">NUMERICAS</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">BINARIAS</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">CATEGORICAS</span><span class="p">)</span>
+<span class="n">p_dummies</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">NUMERICAS</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">BINARIAS</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">panel</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">u</span><span class="o">.</span><span class="n">CATEGORICAS</span><span class="p">)</span>
+<span class="n">resumen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+    <span class="s2">"Registros crudos (cargas)"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">env</span><span class="p">),</span>
+    <span class="s2">"Observaciones del panel (corredor-semana)"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">panel</span><span class="p">),</span>
+    <span class="s2">"Predictoras (antes de codificar)"</span><span class="p">:</span> <span class="n">p_pred</span><span class="p">,</span>
+    <span class="s2">"Columnas tras one-hot (máximo)"</span><span class="p">:</span> <span class="n">p_dummies</span><span class="p">,</span>
+    <span class="s2">"Relación n/p (con one-hot)"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">panel</span><span class="p">)</span> <span class="o">/</span> <span class="n">p_dummies</span><span class="p">,</span>
+    <span class="s2">"Corredores (entidades)"</span><span class="p">:</span> <span class="n">n_corr</span><span class="p">,</span>
+    <span class="s2">"Municipios de origen"</span><span class="p">:</span> <span class="n">panel</span><span class="p">[</span><span class="s2">"cod_mpio"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+    <span class="s2">"Centrales mayoristas"</span><span class="p">:</span> <span class="n">panel</span><span class="p">[</span><span class="s2">"mercado"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+    <span class="s2">"Semanas"</span><span class="p">:</span> <span class="n">panel</span><span class="p">[</span><span class="s2">"semana"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">(),</span>
+    <span class="s2">"Casos clase 1 (interrupción)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">panel</span><span class="p">[</span><span class="n">u</span><span class="o">.</span><span class="n">VAR_OBJETIVO</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"Casos clase 0"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">panel</span><span class="p">[</span><span class="n">u</span><span class="o">.</span><span class="n">VAR_OBJETIVO</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+<span class="p">})</span>
+<span class="n">resumen</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"valor"</span><span class="p">)</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"</span><span class="si">{:,.0f}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_54d6e">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_54d6e_level0_col0" class="col_heading level0 col0" >valor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_54d6e_level0_row0" class="row_heading level0 row0" >Registros crudos (cargas)</th>
+      <td id="T_54d6e_row0_col0" class="data row0 col0" >15,493,054</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row1" class="row_heading level0 row1" >Observaciones del panel (corredor-semana)</th>
+      <td id="T_54d6e_row1_col0" class="data row1 col0" >744,921</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row2" class="row_heading level0 row2" >Predictoras (antes de codificar)</th>
+      <td id="T_54d6e_row2_col0" class="data row2 col0" >30</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row3" class="row_heading level0 row3" >Columnas tras one-hot (máximo)</th>
+      <td id="T_54d6e_row3_col0" class="data row3 col0" >97</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row4" class="row_heading level0 row4" >Relación n/p (con one-hot)</th>
+      <td id="T_54d6e_row4_col0" class="data row4 col0" >7,680</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row5" class="row_heading level0 row5" >Corredores (entidades)</th>
+      <td id="T_54d6e_row5_col0" class="data row5 col0" >4,512</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row6" class="row_heading level0 row6" >Municipios de origen</th>
+      <td id="T_54d6e_row6_col0" class="data row6 col0" >925</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row7" class="row_heading level0 row7" >Centrales mayoristas</th>
+      <td id="T_54d6e_row7_col0" class="data row7 col0" >32</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row8" class="row_heading level0 row8" >Semanas</th>
+      <td id="T_54d6e_row8_col0" class="data row8 col0" >414</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row9" class="row_heading level0 row9" >Casos clase 1 (interrupción)</th>
+      <td id="T_54d6e_row9_col0" class="data row9 col0" >208,115</td>
+    </tr>
+    <tr>
+      <th id="T_54d6e_level0_row10" class="row_heading level0 row10" >Casos clase 0</th>
+      <td id="T_54d6e_row10_col0" class="data row10 col0" >536,806</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><strong>Tamaño efectivo.</strong> Las 744 mil filas no son independientes: provienen de 4.512 corredores
+observados a lo largo del tiempo y de 925 municipios de origen. Las filas de un mismo corredor
+están autocorrelacionadas (sección 2.6) y los corredores vecinos se parecen (sección 2.7). El
+tamaño efectivo está entre el número de corredores y el número de filas; por eso la validación
+y los intervalos de confianza se construyen por bloques (semanas completas) y no por filas.</p>
+</section>
+<section id="calidad-de-los-datos">
+<h2>1.7 Calidad de los datos<a class="headerlink" href="#calidad-de-los-datos" title="Link to this heading">#</a></h2>
+<section id="valores-faltantes">
+<h3>1.7.1 Valores faltantes<a class="headerlink" href="#valores-faltantes" title="Link to this heading">#</a></h3>
+<p>El dato crudo no tiene celdas vacías en las columnas informativas después de eliminar
+226.633 filas vacías (líneas con solo separadores al final de algunos CSV). El faltante
+relevante es <strong>estructural</strong>: semanas en que una central no fue encuestada. En esas semanas el
+abastecimiento es desconocido, no cero. La matriz siguiente muestra la cobertura
+central × semana.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">env</span><span class="p">[</span><span class="s2">"semana"</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">"fecha"</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s2">"W-SUN"</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">start_time</span>
+<span class="n">env</span><span class="p">[</span><span class="s2">"mercado_n"</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">"mercado"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"Cali, Santa Helena"</span><span class="p">:</span> <span class="s2">"Cali, Santa Elena"</span><span class="p">,</span> <span class="s2">"Pereira, La 41-Impala"</span><span class="p">:</span> <span class="s2">"Pereira, La 41"</span><span class="p">})</span>
+<span class="n">cob</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"mercado_n"</span><span class="p">,</span> <span class="s2">"semana"</span><span class="p">])[</span><span class="s2">"fecha"</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cob</span> <span class="o">=</span> <span class="n">cob</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">cob</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">cob</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">freq</span><span class="o">=</span><span class="s2">"W-MON"</span><span class="p">),</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cob</span> <span class="o">=</span> <span class="n">cob</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">cob</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cob</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Blues"</span><span class="p">,</span> <span class="n">cbar_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">"label"</span><span class="p">:</span> <span class="s2">"días encuestados en la semana"</span><span class="p">},</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">xticklabels</span><span class="o">=</span><span class="mi">52</span><span class="p">,</span> <span class="n">yticklabels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y"</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cob</span><span class="o">.</span><span class="n">columns</span><span class="p">[::</span><span class="mi">52</span><span class="p">]],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Matriz de cobertura: días de encuesta por central y semana (blanco = faltante)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/094c233f99fcc8f845137c9efb54e986fe44ddafa69b5c76b6bb8cd02fd9eaa1.png" src="_images/094c233f99fcc8f845137c9efb54e986fe44ddafa69b5c76b6bb8cd02fd9eaa1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">falt</span> <span class="o">=</span> <span class="p">(</span><span class="n">cob</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Proporción de semanas sin encuesta por central (las 10 mayores):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">falt</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Promedio global de semanas sin encuesta: </span><span class="si">{</span><span class="p">(</span><span class="n">cob</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Proporción de semanas sin encuesta por central (las 10 mayores):
+mercado_n
+Pereira, La 41                                 0.634
+Florencia (Caquetá)                            0.634
+Tibasosa (Boyacá), Coomproriente               0.634
+Sincelejo, Nuevo Mercado                       0.007
+Pasto, El Potrerillo                           0.007
+Popayán, Plaza de mercado del barrio Bolívar   0.005
+Manizales, Centro Galerías                     0.005
+Ibagué, Plaza La 21                            0.005
+Montería, Mercado del Sur                      0.005
+Santa Marta (Magdalena)                        0.005
+
+Promedio global de semanas sin encuesta: 0.061
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Mecanismo.</strong> Para decidir entre MCAR, MAR y MNAR se compara el abastecimiento previo de las
+semanas seguidas de un hueco de encuesta con el de las semanas seguidas de dato. Si el faltante
+fuera MNAR (se deja de encuestar porque llega poca carga), las semanas previas a un hueco
+tendrían niveles de abastecimiento más bajos. El análisis se restringe al periodo en que cada
+central está en operación.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+
+<span class="n">sem</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">cob</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">cob</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">freq</span><span class="o">=</span><span class="s2">"W-MON"</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">cob</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+    <span class="n">serie</span> <span class="o">=</span> <span class="n">cob</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+    <span class="n">activa</span> <span class="o">=</span> <span class="n">serie</span><span class="p">[</span><span class="n">serie</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">activa</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">rango</span> <span class="o">=</span> <span class="n">serie</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">activa</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">min</span><span class="p">():</span><span class="n">activa</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+    <span class="n">siguiente_falta</span> <span class="o">=</span> <span class="p">(</span><span class="n">rango</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">flag</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"mercado"</span><span class="p">:</span> <span class="n">m</span><span class="p">,</span> <span class="s2">"semana"</span><span class="p">:</span> <span class="n">rango</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="s2">"falta_t1"</span><span class="p">:</span> <span class="n">siguiente_falta</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+                              <span class="s2">"dias_t"</span><span class="p">:</span> <span class="n">rango</span><span class="o">.</span><span class="n">values</span><span class="p">}))</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="n">kg_sem</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"mercado_n"</span><span class="p">,</span> <span class="s2">"semana"</span><span class="p">])[</span><span class="s2">"kg"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"kg"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span> \
+            <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"mercado_n"</span><span class="p">:</span> <span class="s2">"mercado"</span><span class="p">})</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">kg_sem</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"semana"</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="n">flag</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="s2">"dias_t"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">flag</span><span class="p">[</span><span class="s2">"kg_dia"</span><span class="p">]</span> <span class="o">=</span> <span class="n">flag</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]</span> <span class="o">/</span> <span class="n">flag</span><span class="p">[</span><span class="s2">"dias_t"</span><span class="p">]</span>
+<span class="n">flag</span><span class="p">[</span><span class="s2">"kg_dia_rel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">flag</span><span class="p">[</span><span class="s2">"kg_dia"</span><span class="p">]</span> <span class="o">/</span> <span class="n">flag</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"mercado"</span><span class="p">)[</span><span class="s2">"kg_dia"</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s2">"median"</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">flag</span><span class="p">[</span><span class="s2">"falta_t1"</span><span class="p">],</span> <span class="s2">"kg_dia_rel"</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">flag</span><span class="p">[</span><span class="s2">"falta_t1"</span><span class="p">],</span> <span class="s2">"kg_dia_rel"</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">mw</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">rbc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mw</span><span class="o">.</span><span class="n">statistic</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Semanas seguidas de faltante: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">; seguidas de dato: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mediana del abastecimiento relativo en t: con faltante en t+1 = </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; sin faltante = </span><span class="si">{</span><span class="n">b</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mann-Whitney U p = </span><span class="si">{</span><span class="n">mw</span><span class="o">.</span><span class="n">pvalue</span><span class="si">:</span><span class="s2">.3g</span><span class="si">}</span><span class="s2">; correlación biserial de rangos = </span><span class="si">{</span><span class="n">rbc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">mes</span> <span class="o">=</span> <span class="n">flag</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">mes</span><span class="o">=</span><span class="n">flag</span><span class="p">[</span><span class="s2">"semana"</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"mes"</span><span class="p">)[</span><span class="s2">"falta_t1"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Proporción de semanas seguidas de faltante, por mes:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mes</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Semanas seguidas de faltante: 5; seguidas de dato: 12,553
+Mediana del abastecimiento relativo en t: con faltante en t+1 = 0.937; sin faltante = 1.000
+Mann-Whitney U p = 0.174; correlación biserial de rangos = 0.351
+
+Proporción de semanas seguidas de faltante, por mes:
+mes
+1    0.000
+2    0.000
+3    0.001
+4    0.001
+5    0.002
+6    0.001
+7    0.000
+8    0.000
+9    0.000
+10   0.000
+11   0.000
+12   0.000
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretación.</strong> El faltante tiene dos orígenes distintos:</p>
+<ol class="arabic simple">
+<li><p><strong>Incorporación tardía de centrales</strong> (Pereira-La 41, Florencia y Tibasosa, con 63 % de
+semanas sin dato). Antes de su entrada al operativo la central no existe en la muestra; el
+faltante depende solo de la central y del periodo, que son observables, es decir, es <strong>MAR
+por diseño</strong>. No se imputa: los corredores de esas centrales empiezan a contar cuando la
+central empieza a reportar (el panel arranca en la primera semana observada de cada corredor).</p></li>
+<li><p><strong>Huecos internos</strong>: solo 5 semanas-central en ocho años. Con tan pocos casos la prueba de
+Mann-Whitney no tiene potencia (p = 0,17) y la diferencia de medianas es pequeña (0,94 frente a
+1,00), por lo que no hay evidencia de un mecanismo MNAR. Estas semanas se tratan como
+ausentes (NaN), nunca como cero, y quedan fuera de la población en riesgo cuando la semana
+<em>t+1</em> no tiene encuesta.</p></li>
+</ol>
+<p>La prueba de Little no es aplicable aquí porque el faltante no está en columnas de una tabla
+rectangular sino en celdas central-semana completas. Dentro del panel de modelado, la única
+variable con faltantes es <code class="docutils literal notranslate"><span class="pre">ratio_t_1</span></code> (192 filas, 0,03 %), cuando la semana <em>t-1</em> no tuvo
+encuesta; se imputa con la mediana de entrenamiento dentro del pipeline.</p>
+</section>
+<section id="duplicados-exactos-y-casi-duplicados">
+<h3>1.7.2 Duplicados exactos y casi-duplicados<a class="headerlink" href="#duplicados-exactos-y-casi-duplicados" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cols_clave</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"cod_mpio"</span><span class="p">,</span> <span class="s2">"alimento"</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">]</span>
+<span class="n">dup_exact</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="n">cols_clave</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dup_casi</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"mercado"</span><span class="p">,</span> <span class="s2">"fecha"</span><span class="p">,</span> <span class="s2">"cod_mpio"</span><span class="p">,</span> <span class="s2">"alimento"</span><span class="p">],</span> <span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Registros en grupos de duplicados exactos: </span><span class="si">{</span><span class="n">dup_exact</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">dup_exact</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Registros en grupos casi-duplicados (misma central, día, origen y producto; kg distinto o igual): "</span>
+      <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">dup_casi</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">dup_casi</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="n">tam</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">dup_exact</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">cols_clave</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Tamaño de los grupos de duplicados exactos:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tam</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">kg más frecuentes entre duplicados exactos:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dup_exact</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Registros en grupos de duplicados exactos: 4,034,531 (26.04%)
+Registros en grupos casi-duplicados (misma central, día, origen y producto; kg distinto o igual): 10,966,161 (70.78%)
+
+Tamaño de los grupos de duplicados exactos:
+2    1107392
+3     276334
+4      98423
+5      41594
+6      19665
+7      10172
+8       5757
+9       3444
+
+kg más frecuentes entre duplicados exactos:
+kg
+1,000.000     350170
+10,000.000    221705
+6,000.000     211451
+2,000.000     202054
+500.000       189074
+5,000.000     178630
+1,500.000     138931
+200.000       111500
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretación.</strong> Una cuarta parte de los registros tiene un gemelo exacto. No son errores de
+captura: SIPSA-A registra cada vehículo que ingresa y las cargas se despachan en tamaños
+estándar (1.000, 2.000, 5.000 o 10.000 kg). Dos camiones de papa de 10 toneladas desde Túquerres
+a Armenia el mismo día generan dos filas idénticas legítimas. Los valores más frecuentes entre
+los duplicados son precisamente esos tamaños redondos. Como el registro no trae un identificador
+de vehículo, no es posible separar duplicados legítimos de dobles digitaciones; eliminarlos
+subestimaría el abastecimiento en cerca de 26 %. <strong>Decisión:</strong> conservarlos y trabajar con
+agregados semanales, donde una eventual doble digitación aislada tiene poco peso.</p>
+</section>
+<section id="valores-imposibles-o-inconsistentes">
+<h3>1.7.3 Valores imposibles o inconsistentes<a class="headerlink" href="#valores-imposibles-o-inconsistentes" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">divi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">RAW</span> <span class="o">/</span> <span class="s2">"divipola_municipios.csv"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">cod_validos</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">divi</span><span class="p">[</span><span class="s2">"cod_mpio"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">es_nacional</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s2">"cod_mpio"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">cod_validos</span><span class="p">)</span>
+<span class="n">checks</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+    <span class="s2">"kg &lt;= 0"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">env</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"kg no numérico"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"fecha inválida"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s2">"fecha"</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"fecha fuera de 2018-2025"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(((</span><span class="n">env</span><span class="p">[</span><span class="s2">"fecha"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="s2">"2018-01-01"</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s2">"fecha"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s2">"2025-12-31"</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"origen no DIVIPOLA (importación o 'n.a.')"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="o">~</span><span class="n">es_nacional</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+    <span class="s2">"kg &gt; 40.000 (más que un tractocamión)"</span><span class="p">:</span> <span class="nb">int</span><span class="p">((</span><span class="n">env</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">40000</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span>
+<span class="p">})</span>
+<span class="n">checks</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s2">"registros"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>registros</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>kg &lt;= 0</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>kg no numérico</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>fecha inválida</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>fecha fuera de 2018-2025</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>origen no DIVIPOLA (importación o 'n.a.')</th>
+      <td>202248</td>
+    </tr>
+    <tr>
+      <th>kg &gt; 40.000 (más que un tractocamión)</th>
+      <td>37</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Nombres de central con variantes de escritura:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s2">"mercado"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()):</span>
+    <span class="k">if</span> <span class="s2">"Santa"</span> <span class="ow">in</span> <span class="n">m</span> <span class="ow">and</span> <span class="s2">"Cali"</span> <span class="ow">in</span> <span class="n">m</span> <span class="ow">or</span> <span class="s2">"La 41"</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="p">(</span><span class="n">env</span><span class="p">[</span><span class="s1">'mercado'</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Orígenes no nacionales más frecuentes:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">es_nacional</span><span class="p">,</span> <span class="s2">"mpio_origen"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Participación de importaciones en kg: </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">es_nacional</span><span class="p">,</span><span class="w"> </span><span class="s1">'kg'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">env</span><span class="p">[</span><span class="s1">'kg'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Nombres de central con variantes de escritura:
+   Cali, Santa Elena 297,115
+   Cali, Santa Helena 211,341
+   Pereira, La 41 40,984
+   Pereira, La 41-Impala 10,246
+
+Orígenes no nacionales más frecuentes:
+mpio_origen
+CHILE                        60813
+ESTADOS UNIDOS DE AMÉRICA    35367
+ECUADOR                      31670
+CANADÁ                       25986
+PERÚ                         11487
+VIETNAM                      10365
+CHINA                        10337
+ARGENTINA                     3349
+
+Participación de importaciones en kg: 4.66%
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretación.</strong></p>
+<ul class="simple">
+<li><p>Los valores imposibles son marginales: 1 registro con kg = 0, 2 con kg y fecha ilegibles, y 37
+cargas mayores a 40 t (máximo 42,5 t, compatible con un tractocamión con sobrecarga). Se
+eliminan los tres primeros y se conservan las cargas grandes.</p></li>
+<li><p><strong>Categorías mal escritas:</strong> la misma central aparece como «Cali, Santa Elena» y «Cali, Santa
+Helena», y «Pereira, La 41» como «Pereira, La 41-Impala», según el año. Sin corregirlo, cada
+cambio de nombre crearía corredores que «desaparecen» y producirían falsas interrupciones.
+Se unifican en <code class="docutils literal notranslate"><span class="pre">02_construir_panel.py</span></code>.</p></li>
+<li><p><strong>Encabezados y formatos cambiantes:</strong> entre 2018 y 2025 el DANE cambió los nombres de las
+columnas cuatro veces, la codificación de texto (latin-1 y UTF-8) y el formato numérico
+(separador de miles). El script de consolidación normaliza todo ello.</p></li>
+<li><p><strong>Importaciones:</strong> desde 2025 los orígenes extranjeros se codifican con ISO 3166 y antes como
+«n.a.». Representan 4,7 % del volumen. Se excluyen del panel porque el problema se refiere a
+corredores nacionales y no tienen municipio de origen.</p></li>
+</ul>
+</section>
+<section id="outliers-en-la-cantidad-por-carga">
+<h3>1.7.4 Outliers en la cantidad por carga<a class="headerlink" href="#outliers-en-la-cantidad-por-carga" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">envp</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">env</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">envp</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#4263eb"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"kg por carga"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"kg"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">envp</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">]),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#4263eb"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"log10(kg) por carga"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"log10 kg"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">lk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">envp</span><span class="p">[</span><span class="s2">"kg"</span><span class="p">])</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">envp</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">lk</span><span class="o">=</span><span class="n">lk</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"alimento"</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">"lk"</span><span class="p">]</span>
+<span class="n">q1</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)),</span> <span class="n">g</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">))</span>
+<span class="n">iqr</span> <span class="o">=</span> <span class="n">q3</span> <span class="o">-</span> <span class="n">q1</span>
+<span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">lk</span> <span class="o">&lt;</span> <span class="n">q1</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">lk</span> <span class="o">&gt;</span> <span class="n">q3</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">iqr</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Outliers extremos (fuera de 3·IQR del log-kg dentro de cada producto): </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">envp</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">out</span><span class="p">,</span> <span class="p">[</span><span class="s2">"alimento"</span><span class="p">,</span> <span class="s2">"kg"</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"alimento"</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">"kg"</span><span class="p">]</span>
+      <span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s2">"size"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">])</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/912d2ca79e4d0fb6f623393503283b04282826a7d490d1fabe223e2e0d6c3036.png" src="_images/912d2ca79e4d0fb6f623393503283b04282826a7d490d1fabe223e2e0d6c3036.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Outliers extremos (fuera de 3·IQR del log-kg dentro de cada producto): 30,272 (0.20%)
+                        size     min        max
+alimento                                       
+Papa superior          11638  15.000    960.000
+Papa parda pastusa      3596  50.000    600.000
+Res en pie              2823 404.000 14,544.000
+Papa sabanera           2431   5.000 35,000.000
+Papa suprema            1733  50.000  1,250.000
+Arveja verde en vaina    762   1.000 36,000.000
+Jengibre                 740   1.000 32,000.000
+Yuca                     515  25.000     63.000
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretación.</strong> La cantidad por carga es muy asimétrica (de 1 kg a 42 t); en escala
+logarítmica se ve multimodal, con picos en tamaños estándar. Dentro de cada producto, solo 0,2 %
+de las cargas queda fuera de 3·IQR del log-kg, y la mayoría son cargas pequeñas de papa (bultos
+sueltos) o cargas grandes de productos que normalmente llegan en poca cantidad. Son valores
+plausibles, no errores, así que no se eliminan. Como el modelo trabaja con agregados semanales
+normalizados por el promedio del propio corredor (<code class="docutils literal notranslate"><span class="pre">ratio_t</span></code>), el efecto de una carga atípica se
+diluye. Los outliers del panel se tratan en la sección 2.2.</p>
+</section>
+<section id="sesgos-de-muestreo-y-representatividad">
+<h3>1.7.5 Sesgos de muestreo y representatividad<a class="headerlink" href="#sesgos-de-muestreo-y-representatividad" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nac</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">es_nacional</span><span class="p">]</span>
+<span class="n">top_or</span> <span class="o">=</span> <span class="n">nac</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"depto_origen"</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="s2">"kg"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">top_de</span> <span class="o">=</span> <span class="n">nac</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"mercado_n"</span><span class="p">)[</span><span class="s2">"kg"</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="p">(</span><span class="n">top_or</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#2f9e44"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Millones de toneladas por departamento de origen (top 15)"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"millones de t"</span><span class="p">)</span>
+<span class="p">(</span><span class="n">top_de</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">"#1971c2"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Millones de toneladas por central (top 15)"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"millones de t"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">pdet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">RAW</span> <span class="o">/</span> <span class="s2">"pdet_municipios.csv"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">pdet_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">pdet</span><span class="p">[</span><span class="s2">"cod_muni"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">orig</span> <span class="o">=</span> <span class="n">nac</span><span class="p">[</span><span class="s2">"cod_mpio"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Municipios PDET oficiales: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdet_set</span><span class="p">)</span><span class="si">}</span><span class="s2">; aparecen como origen en SIPSA-A: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdet_set</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nb">set</span><span class="p">(</span><span class="n">orig</span><span class="p">))</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Participación de orígenes PDET en kg nacionales: </span><span class="si">{</span><span class="n">nac</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">nac</span><span class="p">[</span><span class="s1">'cod_mpio'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">pdet_set</span><span class="p">),</span><span class="w"> </span><span class="s1">'kg'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">nac</span><span class="p">[</span><span class="s1">'kg'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Participación de Corabastos en el total: </span><span class="si">{</span><span class="n">top_de</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">top_de</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/0e93c6750abae6e81558bbb1350911286e25154c7acf90699f2d4638038d1c81.png" src="_images/0e93c6750abae6e81558bbb1350911286e25154c7acf90699f2d4638038d1c81.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Municipios PDET oficiales: 170; aparecen como origen en SIPSA-A: 160
+Participación de orígenes PDET en kg nacionales: 6.75%
+Participación de Corabastos en el total: 34.84%
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Interpretación.</strong></p>
+<ul class="simple">
+<li><p><strong>Cobertura urbana y mayorista.</strong> SIPSA-A mide lo que llega a 32 centrales de ciudades
+intermedias y grandes. No observa el abastecimiento de cabeceras pequeñas, mercados campesinos,
+plazas municipales ni la venta directa, que son justamente los canales más importantes en
+territorios PDET. Las conclusiones se refieren a la conexión de esos territorios con los
+grandes mercados, no a su seguridad alimentaria local.</p></li>
+<li><p><strong>Concentración.</strong> Corabastos recibe 35 % del volumen; los departamentos andinos (Cundinamarca,
+Boyacá, Antioquia, Nariño) dominan la oferta. Un modelo ajustado por filas estará dominado por
+corredores andinos hacia Bogotá y Medellín.</p></li>
+<li><p><strong>Procedencia declarada.</strong> El origen lo declara el transportador y puede corresponder a un
+centro de acopio y no al lugar de producción, lo que subrepresenta municipios rurales dispersos.</p></li>
+<li><p><strong>PDET.</strong> 160 de los 170 municipios PDET aparecen alguna vez como origen, pero aportan solo
+6,8 % del volumen. Los corredores PDET serán minoría en el panel (sección 2.2).</p></li>
+</ul>
+</section>
+</section>
+<section id="consideraciones-eticas">
+<h2>1.8 Consideraciones éticas<a class="headerlink" href="#consideraciones-eticas" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Datos personales.</strong> SIPSA-A no contiene nombres, documentos ni placas de vehículos. Los
+microdatos publicados por el DANE ya están anonimizados.</p></li>
+<li><p><strong>Riesgo de reidentificación.</strong> La unidad mínima es el municipio de origen y el día. En
+corredores muy pequeños (un solo productor o transportador que lleva carga desde un
+municipio a una central) la serie semanal podría revelar la actividad comercial de una persona
+o empresa identificable localmente. Por eso el informe solo presenta agregados y no publica
+series de corredores individuales pequeños.</p></li>
+<li><p><strong>Coordenadas.</strong> Se usan centroides municipales, no ubicaciones de fincas ni rutas; el
+riesgo de localizar personas es mínimo.</p></li>
+<li><p><strong>Uso de los resultados.</strong> Un modelo que etiquete corredores PDET como «frágiles» podría
+reforzar estigmas territoriales o desviar recursos. Las predicciones deben servir para
+priorizar apoyo logístico, no para excluir territorios de mercados o inversiones.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "ml-sipsa"
+        },
+        kernelOptions: {
+            name: "ml-sipsa",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ml-sipsa'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Interrupciones en corredores de abastecimiento de alimentos en Colombia</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_eda_general.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">2. Análisis exploratorio (I): partición, objetivo, análisis uni, bi y multivariado, y fuga</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#problema-de-investigacion">1.1 Problema de investigación</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#justificacion-de-la-seleccion-del-dataset">1.2 Justificación de la selección del dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fuente-y-licencia">1.3 Fuente y licencia</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datos-crudos-un-registro-por-carga">1.4 Datos crudos: un registro por carga</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diccionario-del-panel-de-modelado">1.5 Diccionario del panel de modelado</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estructura-de-los-datos">1.6 Estructura de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calidad-de-los-datos">1.7 Calidad de los datos</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes">1.7.1 Valores faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#duplicados-exactos-y-casi-duplicados">1.7.2 Duplicados exactos y casi-duplicados</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-imposibles-o-inconsistentes">1.7.3 Valores imposibles o inconsistentes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#outliers-en-la-cantidad-por-carga">1.7.4 Outliers en la cantidad por carga</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-de-muestreo-y-representatividad">1.7.5 Sesgos de muestreo y representatividad</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consideraciones-eticas">1.8 Consideraciones éticas</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Camilo Molina Guerrero
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
