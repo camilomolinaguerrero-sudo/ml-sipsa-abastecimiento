@@ -3,6 +3,8 @@
 Informe en Jupyter Book 1 sobre la predicción de interrupciones semanales en corredores
 municipio de origen → central mayorista, con microdatos SIPSA-A del DANE (2018-2025).
 
+**Libro publicado:** https://camilomolinaguerrero-sudo.github.io/ml-sipsa-abastecimiento/
+
 ## Estructura
 
 ```
