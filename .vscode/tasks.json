@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Descargar y consolidar SIPSA-A",
+      "type": "shell",
+      "command": "${userHome}/.venvs/ml-sipsa-jb/bin/python src/01_descarga_consolidacion.py --zips data/raw/zips"
+    },
+    {
+      "label": "2. Construir panel de corredores",
+      "type": "shell",
+      "command": "${userHome}/.venvs/ml-sipsa-jb/bin/python src/02_construir_panel.py"
+    },
+    {
+      "label": "3. Construir Jupyter Book (HTML)",
+      "type": "shell",
+      "command": "${userHome}/.venvs/ml-sipsa-jb/bin/jupyter-book build book/",
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "4. Abrir el libro en el navegador",
+      "type": "shell",
+      "command": "open book/_build/html/index.html"
+    }
+  ]
+}

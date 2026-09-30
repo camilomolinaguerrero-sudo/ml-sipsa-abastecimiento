@@ -1,0 +1,8 @@
+# Construcción del libro (se publica en la rama gh-pages)
+book/_build/
+# Datos intermedios pesados y reproducibles con src/01_descarga_consolidacion.py
+data/interim/
+data/raw/zips/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

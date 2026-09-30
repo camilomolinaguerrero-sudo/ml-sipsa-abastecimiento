@@ -1,0 +1,14 @@
+{
+  "python.defaultInterpreterPath": "${userHome}/.venvs/ml-sipsa-jb/bin/python",
+  "jupyter.notebookFileRoot": "${fileDirname}",
+  "jupyter.askForKernelRestart": false,
+  "notebook.output.scrolling": true,
+  "notebook.lineNumbers": "on",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "book/_build/.doctrees": true
+  },
+  "files.associations": {
+    "*.md": "markdown"
+  }
+}

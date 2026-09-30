@@ -1,0 +1,36 @@
+# Configuración del Jupyter Book (versión 1.x, como en el tutorial del curso)
+title: Interrupciones en corredores de abastecimiento de alimentos
+author: Camilo Molina Guerrero
+copyright: "2026"
+logo: ""
+only_build_toc_files: true
+
+# Los cuadernos se entregan ya ejecutados; el libro no los vuelve a correr.
+# Para re-ejecutar todo al construir: execute_notebooks: force
+execute:
+  execute_notebooks: "off"
+  timeout: 3600
+
+sphinx:
+  config:
+    language: es
+    html_show_copyright: true
+    nb_merge_streams: true
+    mathjax3_config:
+      tex:
+        inlineMath: [["$", "$"], ["\\(", "\\)"]]
+
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - amsmath
+    - colon_fence
+    - linkify
+
+html:
+  use_repository_button: false
+  use_download_button: true
+  home_page_in_navbar: true
+
+launch_buttons:
+  notebook_interface: jupyterlab

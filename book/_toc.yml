@@ -1,0 +1,10 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Entregable 1
+    chapters:
+      - file: 01_base_datos
+      - file: 02_eda_general
+      - file: 03_eda_temporal_espacial
+      - file: 04_modelo_base
+      - file: 05_conclusiones
