@@ -5,7 +5,7 @@ municipio de origen → central mayorista, con microdatos SIPSA-A del DANE (2018
 
 **Libro publicado:** https://camilomolinaguerrero-sudo.github.io/ml-sipsa-abastecimiento/
 
-**Autor:** Camilo Molina Guerrero · Doctorado en Ingeniería, curso de Machine Learning
+**Autores:** Camilo Molina Guerrero y Lina Margarita Buelvas · Doctorado en Ingeniería, curso de Machine Learning
 
 ## Estructura
 
