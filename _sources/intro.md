@@ -2,6 +2,8 @@
 
 **Primer entregable del proyecto de Machine Learning** · Doctorado en Ingeniería
 
+**Autores:** Camilo Molina Guerrero y Lina Margarita Buelvas
+
 Selección de base de datos, análisis exploratorio e implementación de un modelo base
 
 ---
