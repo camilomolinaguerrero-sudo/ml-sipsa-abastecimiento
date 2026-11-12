@@ -16,7 +16,7 @@ proyecto_sipsa/
 ├── data/
 │   ├── raw/                          PDET, DIVIPOLA y geometrías municipales (datos.gov.co)
 │   ├── interim/sipsa_a_envios.parquet  15,5 M cargas consolidadas 2018-2025
-│   └── processed/panel_corredores.parquet  744.921 corredor-semanas (panel de modelado)
+│   └── processed/panel_corredores.parquet  744.921 corredor-semanas (no se publica; ver «Datos»)
 ├── src/
 │   ├── 01_descarga_consolidacion.py  descarga los 18 ZIP del DANE y consolida
 │   ├── 02_construir_panel.py         panel semanal, variable objetivo y predictoras
@@ -61,3 +61,9 @@ curso. Para publicarlo en GitHub Pages: `ghp-import -n -p -f book/_build/html`.
 * Municipios PDET: <https://www.datos.gov.co/d/idrk-ba8y>
 * DIVIPOLA con coordenadas: <https://www.datos.gov.co/d/gdxc-w37w>
 * Geometrías municipales: <https://www.datos.gov.co/d/bhcx-bx97>
+
+El panel `data/processed/panel_corredores.parquet` no se publica en este repositorio. Las
+condiciones de uso del catálogo 697 del DANE no autorizan redistribuir los microdatos, así que el
+repositorio solo publica el código que arma el panel. Para obtenerlo, corre
+`src/01_descarga_consolidacion.py` y `src/02_construir_panel.py` como indica «Reproducir desde la
+terminal». Las versiones anteriores del repositorio sí lo incluían.

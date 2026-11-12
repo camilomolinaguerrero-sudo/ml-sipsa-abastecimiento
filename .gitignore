@@ -6,3 +6,6 @@ data/raw/zips/
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+
+# Panel de modelado: no se redistribuye (condiciones del DANE); se arma con src/02_construir_panel.py
+data/processed/panel_corredores.parquet
